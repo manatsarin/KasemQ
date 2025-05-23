@@ -38,7 +38,15 @@ button:hover {
     background-color: #e9ecef;
     padding: 1rem;
     border-radius: 10px;
-    font-size: 2rem;
+    font-size: 1rem;
+}
+
+h2 {
+    font-size: 8em;
+}
+
+h3 {
+    font-size: 4em;
 }
 
 select {
