@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>หน้าพนักงาน</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ระบบเรียกคิว</h1>
+        <label>ช่องบริการ:</label>
+        <select id="counter">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <button onclick="callNext()">📣 เรียกคิวถัดไป</button>
+        <p id="calledTicket"></p>
+    </div>
+    <script>
+        async function callNext() {
+            const counter = document.getElementById('counter').value;
+            const res = await fetch('/call_next', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ counter })
+            });
+            const data = await res.json();
+            if (data.ticket) {
+                document.getElementById('calledTicket').innerText = 'เรียกคิวหมายเลข: ' + data.ticket;
+            } else {
+                document.getElementById('calledTicket').innerText = 'ไม่มีคิวที่รออยู่';
+            }
+        }
+    </script>
+</body>
+</html>

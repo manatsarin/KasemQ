@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>รับบัตรคิว</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>รับบัตรคิว</h1>
+        <button onclick="getTicket()">📥 รับบัตรคิว</button>
+        <p id="ticketNumber"></p>
+    </div>
+    <script>
+        async function getTicket() {
+            const res = await fetch('/get_ticket', { method: 'POST' });
+            const data = await res.json();
+            document.getElementById('ticketNumber').innerText = 'หมายเลขคิวของคุณ: ' + data.ticket;
+        }
+    </script>
+</body>
+</html>

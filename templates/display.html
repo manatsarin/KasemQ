@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>หน้าจอแสดงคิว</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="display-container">
+        <h1>📺 หมายเลขที่ถูกเรียก</h1>
+        <div class="ticket-box">
+            <h2 id="ticket">--</h2>
+            <h3 id="counter">--</h3>
+        </div>
+        <audio id="beep" src="/static/audio/beep.mp3"></audio>
+        <button id="enableVoice">🔊 เปิดเสียง</button>
+    </div>
+    <script>
+        const socket = io();
+        const synth = window.speechSynthesis;
+        let voiceEnabled = false;
+
+        function speak(text) {
+            if (!synth || !voiceEnabled) return;
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'th-TH';
+            synth.speak(utter);
+        }
+
+        document.getElementById('enableVoice').addEventListener('click', () => {
+            const test = new SpeechSynthesisUtterance('เริ่มระบบเสียง');
+            test.lang = 'th-TH';
+            synth.speak(test);
+            voiceEnabled = true;
+            document.getElementById('enableVoice').style.display = 'none';
+        });
+
+        socket.on('new_call', function(data) {
+            document.getElementById('ticket').innerText = 'หมายเลข: ' + data.ticket;
+            document.getElementById('counter').innerText = 'ช่องบริการ: ' + data.counter;
+            document.getElementById('beep').play();
+            setTimeout(() => {
+                speak(`เชิญหมายเลข ${data.ticket} ที่ช่องบริการ ${data.counter}`);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
